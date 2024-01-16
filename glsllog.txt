@@ -1,4 +1,18 @@
 
-0(47) : error C1038: declaration of "d" conflicts with previous declaration at 0(37)
-0(50) : error C1038: declaration of "s" conflicts with previous declaration at 0(29)
+ERROR: 0:11: Invalid storage qualifiers 'in' in global variable context
+ERROR: 0:12: Invalid storage qualifiers 'in' in global variable context
+ERROR: 0:13: Invalid storage qualifiers 'in' in global variable context
+ERROR: 0:14: Invalid storage qualifiers 'in' in global variable context
+ERROR: 0:15: Invalid storage qualifiers 'in' in global variable context
+ERROR: 0:20: Use of undeclared identifier 'vN'
+ERROR: 0:21: Use of undeclared identifier 'vL'
+ERROR: 0:22: Use of undeclared identifier 'vE'
+ERROR: 0:33: Use of undeclared identifier 'Normal'
+ERROR: 0:33: Use of undeclared identifier 'Light'
+ERROR: 0:35: Use of undeclared identifier 'Normal'
+ERROR: 0:35: Use of undeclared identifier 'Light'
+ERROR: 0:36: Use of undeclared identifier 'Light'
+ERROR: 0:36: Use of undeclared identifier 'Normal'
+ERROR: 0:37: Use of undeclared identifier 'Eye'
+ERROR: 0:37: Use of undeclared identifier 'ref'
 

@@ -174,6 +174,8 @@ int		Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;				// rotation angles in degrees
 
 int		SphereList;
+const int MSEC = 10000;
+
 
 
 // function prototypes:
@@ -262,7 +264,7 @@ MulArray3(float factor, float a, float b, float c )
 
 float NowS0, NowT0, NowD;
 GLSLProgram Pattern;
-
+Keytimes Ad;
 
 // main program:
 
@@ -270,6 +272,7 @@ int
 main( int argc, char *argv[ ] )
 {
 	// turn on the glut package:
+
 	// (do this before checking argc and argv since glutInit might
 	// pull some command line arguments out)
 
@@ -416,6 +419,15 @@ Display( )
 	Pattern.SetUniformVariable( (char *)"uS0", NowS0 );
 	Pattern.SetUniformVariable( (char *)"uT0", NowT0 );
 	Pattern.SetUniformVariable( (char *)"uD" , NowD  );
+
+	 int msec = glutGet( GLUT_ELAPSED_TIME )  %  MSEC;
+
+        // turn that into a time in seconds:
+        float nowTime = (float)msec  / 1000.;
+        Pattern.SetUniformVariable( "uAd", Ad.GetValue( nowTime ) );
+		Pattern.SetUniformVariable( "uBd", Ad.GetValue( nowTime ) );
+		Pattern.SetUniformVariable( "uTol", Ad.GetValue( nowTime ) );
+
 
 	glCallList( SphereList );
 
@@ -652,6 +664,14 @@ InitGraphics( )
 	// set the framebuffer clear values:
 
 	glClearColor( BACKCOLOR[0], BACKCOLOR[1], BACKCOLOR[2], BACKCOLOR[3] );
+
+	Ad.Init( );
+        Ad.AddTimeValue(  0.0, 0.2);
+        Ad.AddTimeValue(  2.0, 0.5 );
+        Ad.AddTimeValue(  5.0,  0.7);
+        Ad.AddTimeValue(  8.0,  0.5);
+        Ad.AddTimeValue( 10.0,  0.2);
+
 
 	// setup the callback functions:
 	// DisplayFunc -- redraw the window
