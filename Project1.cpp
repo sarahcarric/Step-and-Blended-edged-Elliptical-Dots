@@ -263,8 +263,11 @@ MulArray3(float factor, float a, float b, float c )
 #include "glslprogram.cpp"
 
 float NowS0, NowT0, NowD;
+float NowAd,NowBd, NowAr,NowBr;
 GLSLProgram Pattern;
-Keytimes Ad;
+Keytimes Ad, Bd, Tol,NowSc,NowTc;
+float NowRs,NowRt;
+
 
 // main program:
 
@@ -420,13 +423,29 @@ Display( )
 	Pattern.SetUniformVariable( (char *)"uT0", NowT0 );
 	Pattern.SetUniformVariable( (char *)"uD" , NowD  );
 
-	 int msec = glutGet( GLUT_ELAPSED_TIME )  %  MSEC;
+ int msec = glutGet( GLUT_ELAPSED_TIME )  %  MSEC;
 
-        // turn that into a time in seconds:
-        float nowTime = (float)msec  / 1000.;
-        Pattern.SetUniformVariable( "uAd", Ad.GetValue( nowTime ) );
-		Pattern.SetUniformVariable( "uBd", Ad.GetValue( nowTime ) );
-		Pattern.SetUniformVariable( "uTol", Ad.GetValue( nowTime ) );
+NowRs=0.06;
+NowRt=0.04;
+ 	float nowTime = (float)msec  / 1000.;
+	Pattern.SetUniformVariable( "uSc", NowSc.GetValue(nowTime));
+	Pattern.SetUniformVariable( "uTc", NowTc.GetValue(nowTime));
+	Pattern.SetUniformVariable( "uRs" , NowRs);
+	Pattern.SetUniformVariable("uRt", NowRt);
+
+	
+	// // NowTol=Tol.GetValue( nowTime );
+	// NowAr=0.06;
+	// NowBr=0.04;
+
+    //     // turn that into a time in seconds:
+	// 	printf("Made it here!\n");
+    //     Pattern.SetUniformVariable( "uAd", Ad.GetValue( nowTime ));
+	// 	Pattern.SetUniformVariable( "uBd", Bd.GetValue( nowTime ));
+	// 	// Pattern.SetUniformVariable( "uTol", NowTol );
+	// 	// Pattern.SetUniformVariable()
+	// 	Pattern.SetUniformVariable("Ar",NowAr);
+	// 	Pattern.SetUniformVariable("Br",NowBr);
 
 
 	glCallList( SphereList );
@@ -665,12 +684,7 @@ InitGraphics( )
 
 	glClearColor( BACKCOLOR[0], BACKCOLOR[1], BACKCOLOR[2], BACKCOLOR[3] );
 
-	Ad.Init( );
-        Ad.AddTimeValue(  0.0, 0.2);
-        Ad.AddTimeValue(  2.0, 0.5 );
-        Ad.AddTimeValue(  5.0,  0.7);
-        Ad.AddTimeValue(  8.0,  0.5);
-        Ad.AddTimeValue( 10.0,  0.2);
+	
 
 
 	// setup the callback functions:
@@ -721,6 +735,39 @@ InitGraphics( )
 	// but, this sets us up nicely for doing animation
 
 	glutIdleFunc( Animate );
+// all other setups go here, such as GLSLProgram and KeyTime setups:
+	printf("Got here!\n");
+// Ad.Init( );
+//         Ad.AddTimeValue(  0.0, 0.2);
+//         Ad.AddTimeValue(  2.0, 0.5 );
+//         Ad.AddTimeValue(  5.0,  0.7);
+//         Ad.AddTimeValue(  8.0,  0.5);
+//         Ad.AddTimeValue( 10.0,  0.2);
+
+// 	Bd.Init( );
+//         Bd.AddTimeValue(  0.0, 0.2);
+//         Bd.AddTimeValue(  2.0, 0.5 );
+//         Bd.AddTimeValue(  5.0,  0.7);
+//         Bd.AddTimeValue(  8.0,  0.5);
+//         Bd.AddTimeValue( 10.0,  0.2);
+
+// 	Tol.Init( );
+//         Tol.AddTimeValue(  0.0, 0.8);
+//         Tol.AddTimeValue(  2.0, 0.5 );
+//         Tol.AddTimeValue(  5.0,  0.7);
+//         Tol.AddTimeValue(  8.0,  0.5);
+//         Tol.AddTimeValue( 10.0,  0.2);
+NowSc.Init();
+	NowSc.AddTimeValue(1,0.1);
+	NowSc.AddTimeValue(3,0.3);
+	NowSc.AddTimeValue(5,0.5);
+	NowSc.AddTimeValue(7,0.8);
+
+	NowTc.Init();
+	NowTc.AddTimeValue(1,0.1);
+	NowTc.AddTimeValue(3,0.3);
+	NowTc.AddTimeValue(5,0.5);
+	NowTc.AddTimeValue(7,0.8);
 
 	// init the glew package (a window must be open to do this):
 
@@ -735,7 +782,7 @@ InitGraphics( )
 	fprintf( stderr, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 #endif
 
-	// all other setups go here, such as GLSLProgram and KeyTime setups:
+	
 
 	Pattern.Init( );
 	bool valid = Pattern.Create( (char *)"pattern.vert", (char *)"pattern.frag" );
