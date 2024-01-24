@@ -28,7 +28,7 @@
 #include "glut.h"
 
 
-//	This is a sample OpenGL / GLUT program
+//	This is a sample OpenGL / GLUT programut
 //
 //	The objective is to draw a 3d object and change the color of the axes
 //		with a glut menu
@@ -263,11 +263,8 @@ MulArray3(float factor, float a, float b, float c )
 #include "glslprogram.cpp"
 
 float NowS0, NowT0, NowD;
-float NowAd,NowBd, NowAr,NowBr;
 GLSLProgram Pattern;
-Keytimes Ad, Bd, Tol,NowSc,NowTc;
-float NowRs,NowRt;
-
+Keytimes Ad, Bd, Tol;
 
 // main program:
 
@@ -415,38 +412,13 @@ Display( )
 	Pattern.Use( );
 
 	// set the uniform variables that will change over time:
+ 	int msec = glutGet( GLUT_ELAPSED_TIME )  %  MSEC;
 
-	NowS0 = 0.5f;
-	NowT0 = 0.5f;
-	NowD  = 0.25f;
-	Pattern.SetUniformVariable( (char *)"uS0", NowS0 );
-	Pattern.SetUniformVariable( (char *)"uT0", NowT0 );
-	Pattern.SetUniformVariable( (char *)"uD" , NowD  );
 
- int msec = glutGet( GLUT_ELAPSED_TIME )  %  MSEC;
-
-NowRs=0.06;
-NowRt=0.04;
- 	float nowTime = (float)msec  / 1000.;
-	Pattern.SetUniformVariable( "uSc", NowSc.GetValue(nowTime));
-	Pattern.SetUniformVariable( "uTc", NowTc.GetValue(nowTime));
-	Pattern.SetUniformVariable( "uRs" , NowRs);
-	Pattern.SetUniformVariable("uRt", NowRt);
-
-	
-	// // NowTol=Tol.GetValue( nowTime );
-	// NowAr=0.06;
-	// NowBr=0.04;
-
-    //     // turn that into a time in seconds:
-	// 	printf("Made it here!\n");
-    //     Pattern.SetUniformVariable( "uAd", Ad.GetValue( nowTime ));
-	// 	Pattern.SetUniformVariable( "uBd", Bd.GetValue( nowTime ));
-	// 	// Pattern.SetUniformVariable( "uTol", NowTol );
-	// 	// Pattern.SetUniformVariable()
-	// 	Pattern.SetUniformVariable("Ar",NowAr);
-	// 	Pattern.SetUniformVariable("Br",NowBr);
-
+ 	float nowTime = (float)msec  / 1000.0f;
+	Pattern.SetUniformVariable((char *) "uAd", Ad.GetValue(nowTime));
+	Pattern.SetUniformVariable( (char *)"uBd", Bd.GetValue(nowTime));
+	Pattern.SetUniformVariable( (char *)"uTol",Tol.GetValue(nowTime));
 
 	glCallList( SphereList );
 
@@ -736,38 +708,28 @@ InitGraphics( )
 
 	glutIdleFunc( Animate );
 // all other setups go here, such as GLSLProgram and KeyTime setups:
-	printf("Got here!\n");
-// Ad.Init( );
-//         Ad.AddTimeValue(  0.0, 0.2);
-//         Ad.AddTimeValue(  2.0, 0.5 );
-//         Ad.AddTimeValue(  5.0,  0.7);
-//         Ad.AddTimeValue(  8.0,  0.5);
-//         Ad.AddTimeValue( 10.0,  0.2);
 
-// 	Bd.Init( );
-//         Bd.AddTimeValue(  0.0, 0.2);
-//         Bd.AddTimeValue(  2.0, 0.5 );
-//         Bd.AddTimeValue(  5.0,  0.7);
-//         Bd.AddTimeValue(  8.0,  0.5);
-//         Bd.AddTimeValue( 10.0,  0.2);
+Ad.Init( );
+        Ad.AddTimeValue(  0.0, 0.01);
+        Ad.AddTimeValue(  1.0, 0.03);
+        Ad.AddTimeValue(  2.0,  0.05);
+        Ad.AddTimeValue(  3.0,  0.07);
+        Ad.AddTimeValue( 5.0,  0.1);
 
-// 	Tol.Init( );
-//         Tol.AddTimeValue(  0.0, 0.8);
-//         Tol.AddTimeValue(  2.0, 0.5 );
-//         Tol.AddTimeValue(  5.0,  0.7);
-//         Tol.AddTimeValue(  8.0,  0.5);
-//         Tol.AddTimeValue( 10.0,  0.2);
-NowSc.Init();
-	NowSc.AddTimeValue(1,0.1);
-	NowSc.AddTimeValue(3,0.3);
-	NowSc.AddTimeValue(5,0.5);
-	NowSc.AddTimeValue(7,0.8);
+	Bd.Init( );
+        Bd.AddTimeValue(  0.0, 0.01);
+        Bd.AddTimeValue(  1.0, 0.03);
+        Bd.AddTimeValue(  2.0,  0.05);
+        Bd.AddTimeValue(  3.0,  0.07);
+        Bd.AddTimeValue( 5.0,  0.1);
 
-	NowTc.Init();
-	NowTc.AddTimeValue(1,0.1);
-	NowTc.AddTimeValue(3,0.3);
-	NowTc.AddTimeValue(5,0.5);
-	NowTc.AddTimeValue(7,0.8);
+	Tol.Init( );
+        Tol.AddTimeValue(  0.0, 0.1);
+        Tol.AddTimeValue(  1.0, 0.3 );
+        Tol.AddTimeValue(  2.0,  0.5);
+        Tol.AddTimeValue(  3.0,  0.7);
+        Tol.AddTimeValue( 5.0,  0.9);
+
 
 	// init the glew package (a window must be open to do this):
 
@@ -792,14 +754,14 @@ NowSc.Init();
 		fprintf( stderr, "Pattern shader created!\n" );
 
 	// set the uniform variables that will not change:
-	
 	Pattern.Use( );
-	Pattern.SetUniformVariable( (char *)"uKa", 0.1f );
-	Pattern.SetUniformVariable( (char *)"uKd", 0.5f );
-	Pattern.SetUniformVariable( (char *)"uKs", 0.4f );
+	Pattern.SetUniformVariable("uKa", 0.1f);
+	Pattern.SetUniformVariable("uKd", 0.6f);
+	Pattern.SetUniformVariable("uKs", 0.3f);
+	Pattern.SetUniformVariable("uShininess", 20.0f);
 	Pattern.SetUniformVariable( (char *)"uColor", 1.f, 0.5f, 0.f );
 	Pattern.SetUniformVariable( (char *)"uSpecularColor", 1.f, 1.f, 1.f );
-	Pattern.SetUniformVariable( (char *)"uShininess", 12.f );
+	
 	Pattern.UnUse( );
 }
 

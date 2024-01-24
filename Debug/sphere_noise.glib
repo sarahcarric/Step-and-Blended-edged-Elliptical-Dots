@@ -1,0 +1,12 @@
+##OpenGL GLIB
+Perspective 90
+LookAt 0 0 2  0 0 0  0 1 0
+Vertex   sphere_noise.vert
+Fragment sphere_noise.frag
+Program  noise				\
+	uAd <.001 .1 .5>			\
+	uBd <.001 .1 .5>			\
+	uTol <0. 0. 1.>				\
+	uColor {1. 0 .5}			\
+	uBackground {1. 1. 1.}
+Sphere 1 75 75
